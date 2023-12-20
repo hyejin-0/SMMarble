@@ -41,10 +41,11 @@ typedef struct smmObject {
 	    int credit;
 	    int energy;
 	    smmObjGrade_e grade;
-	    #if 0
-	    char FdName[MAX_CHARNAME];
+	    char name2[MAX_CHARNAME];
 	    int charge;
-	    #endif
+	    
+	    char mission[MAX_CHARNAME];
+	    
 } smmObject_t;
 
 static smmObject_t smm_node[MAX_NODE];
@@ -67,19 +68,30 @@ void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, i
     
     return ptr;
 }
-#if 0
-void* smmObj_foodObject(char* FdName, int charge)
+
+void* smmObj_foodObject(char* name2, int charge)
 {
 	smmObject_t* ptr;
 	
 	ptr = (smmObject_t*)malloc(sizeof(smmObject_t));
 	
-	strcpy(ptr->FdName, FdName);
+	strcpy(ptr->name2, name2);
 	ptr->charge = charge;
 	
 	return ptr;
 }
-#endif
+
+void* smmObj_festObject(char* mission)
+{
+	smmObject_t* ptr;
+	
+	ptr = (smmObject_t*)malloc(sizeof(smmObject_t));
+	
+	strcpy(ptr->mission, mission);
+	
+	return ptr;
+}
+
 //3. 관련 함수 변경 
 char* smmObj_getNodeName(void* obj)
 {
@@ -111,11 +123,11 @@ int smmObj_getNodeGrade(void* obj)
 	smmObject_t* ptr = (smmObject_t*)obj;
 	return ptr->grade;
 }
-#if 0
-char* smmObj_getNodeFdName(void* obj)
+
+char* smmObj_getNodeName2(void* obj)
 {
 	smmObject_t* ptr = (smmObject_t*)obj;
-	return ptr->FdName;
+	return ptr->name2;
 }
 
 int smmObj_getNodeCharge(void* obj)
@@ -123,4 +135,10 @@ int smmObj_getNodeCharge(void* obj)
 	smmObject_t* ptr = (smmObject_t*)obj;
 	return ptr->charge;
 }
-#endif
+
+char* smmObj_getNodeMission(void* obj)
+{
+	smmObject_t* ptr = (smmObject_t*)obj;
+	return ptr->mission;
+}
+

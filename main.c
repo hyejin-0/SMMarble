@@ -67,6 +67,8 @@ void printPlayerStatus(void) //print all player status at the beginning of each 
 {
 	int i;
 	
+	printf("\n\n================= PLAYER STATUS =================\n");
+	
 	for (i=0;i<player_nr;i++)
 	{
 		printf("%s : credit %i, energy %i, position %i\n",
@@ -75,6 +77,7 @@ void printPlayerStatus(void) //print all player status at the beginning of each 
 					 cur_player[i].energy,
 					 cur_player[i].position);
 	}
+	printf("================= PLAYER STATUS =================\n\n");
 }
 
 void generatePlayers(int n, int initEnergy) //generate a new player
@@ -108,10 +111,12 @@ int rolldie(int player)
     c = getchar();
     fflush(stdin);
     
-#if 0
+
     if (c == 'g')
+    {
         printGrades(player);
-#endif
+    }
+
     
     return (rand()%MAX_DIE + 1);
 }
@@ -120,7 +125,6 @@ int rolldie(int player)
 void actionNode(int player)
 {
 	void *boardPtr = smmdb_getData(LISTNO_NODE, cur_player[player].position);
-	//int type = smmObj_getNodeType(cur_player[player].position);
 	int type = smmObj_getNodeType(boardPtr);
 	char *name = smmObj_getNodeName(boardPtr);
 	void *gradePtr;
@@ -157,7 +161,6 @@ void goForward(int player, int step) //make player go "step" steps on the board 
 			   smmObj_getNodeName(boardPtr));
 }
 
-
 int main(int argc, const char * argv[]) {
     
     FILE* fp;
@@ -167,10 +170,11 @@ int main(int argc, const char * argv[]) {
     int energy;
     int i;
     int initEnergy;
-    #if 0
-    int FdName;
+    char name2[MAX_CHARNAME];
     int charge;
-    #endif
+    
+    char mission[MAX_CHARNAME];
+    
     int turn = 0;
     
     board_nr = 0;
@@ -216,7 +220,7 @@ int main(int argc, const char * argv[]) {
     }
     //printf("(%s)", smmObj_getTypeName(SMMNODE_TYPE_LECTURE));
     
-    #if 0
+    
     //2. food card config 
     if ((fp = fopen(FOODFILEPATH,"r")) == NULL)
     {
@@ -225,10 +229,10 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading food card component......\n");
-    while (fscanf(fp, "%s %i", FdName, &charge) == 2) //read a food parameter set
+    while (fscanf(fp, "%s %i", name2, &charge) == 2) //read a food parameter set
     {
         //store the parameter set
-        void *foodObj = smmObj_foodObject(FdName, charge);
+        void *foodObj = smmObj_foodObject(name2, charge);
         smmdb_addTail(LISTNO_NODE, foodObj);
         food_nr++;
     }
@@ -241,7 +245,7 @@ int main(int argc, const char * argv[]) {
     	void *foodObj = smmdb_getData(LISTNO_NODE, i);
     	
     	printf(" => %i. %s, charge:%i\n",
-		                i, smmObj_getNodeFdName(foodObj),
+		                i, smmObj_getNodeName2(foodObj),
 						smmObj_getNodeCharge(foodObj));
 	}
     
@@ -255,11 +259,12 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading festival card component......\n");
-    while (fscanf(fp, "%s", name) == 1) //read a festival card string
+    while (fscanf(fp, "%s", mission) == 1) //read a festival card string
     {
         //store the parameter set
-        void *festivalObj = smmObj_genObject(name, 0);
+        void *festivalObj = smmObj_festObject(mission);
         smmdb_addTail(LISTNO_NODE, festivalObj);
+        festival_nr++;
     }
     fclose(fp);
     printf("Total number of festival cards : %i\n", festival_nr);
@@ -268,9 +273,15 @@ int main(int argc, const char * argv[]) {
     {
     	void *festivalObj = smmdb_getData(LISTNO_NODE, i);
     	
-    	printf(" => %i, %s", i, smmObj_getNode )
+    	printf(" => %i. %s\n", i, smmObj_getNodeMission(festivalObj));
 	}
-    #endif
+	
+	printf("\n\n\n=========================================================\n");
+	printf("---------------------------------------------------------\n");
+	printf(" Sookmyung Marble!! Let's Graduate (total credit : 30)!! \n");
+	printf("---------------------------------------------------------\n");
+	printf("=========================================================\n\n\n");
+   
     
     
     //2. Player configuration ---------------------------------------------------------------------------------
