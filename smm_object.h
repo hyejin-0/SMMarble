@@ -64,11 +64,20 @@ typedef enum smmObjGrade {
 //object generation
 void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, int energy, smmObjGrade_e grade);
 
+#if 0
+void* smmObj_foodObject(char* FdName, int charge);
+#endif
+
 //member retrieving
 char* smmObj_getNodeName(void* obj);
 int smmObj_getNodeType(void* obj);
 int smmObj_getNodeCredit(void* obj);
 int smmObj_getNodeEnergy(void* obj);
+
+#if 0
+char* smmObj_getNodeFdName(void* obj);
+int smmObj_getNodeCharge(void* obj);
+#endif
 
 //element to string
 char* smmObj_getTypeName(int type);

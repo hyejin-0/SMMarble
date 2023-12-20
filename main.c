@@ -45,9 +45,6 @@ static char player_name[MAX_PLAYER][MAX_CHARNAME];
 //function prototypes
 #if 0
 int isGraduated(void); //check if any player is graduated
-//print grade history of the player
-void goForward(int player, int step); //make player go "step" steps on the board (check if player is graduated)
-void printPlayerStatus(void); //print all player status at the beginning of each turn
 float calcAverageGrade(int player); //calculate average grade of the player
 smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
 void* findGrade(int player, char *lectureName); //find the grade from the player's grade history
@@ -55,7 +52,7 @@ void printGrades(int player); //print all the grade history of the player
 #endif
 
 
-void printGrades(int player)
+void printGrades(int player) //print grade history of the player
 {
 	int i;
 	void *gradePtr;
@@ -66,7 +63,7 @@ void printGrades(int player)
 	}
 }
 
-void printPlayerStatus(void)
+void printPlayerStatus(void) //print all player status at the beginning of each turn
 {
 	int i;
 	
@@ -148,7 +145,8 @@ void actionNode(int player)
     }
 }
 
-void goForward(int player, int step)
+
+void goForward(int player, int step) //make player go "step" steps on the board (check if player is graduated)
 {
 	void *boardPtr;
 	cur_player[player].position += step;
@@ -169,6 +167,10 @@ int main(int argc, const char * argv[]) {
     int energy;
     int i;
     int initEnergy;
+    #if 0
+    int FdName;
+    int charge;
+    #endif
     int turn = 0;
     
     board_nr = 0;
@@ -207,7 +209,7 @@ int main(int argc, const char * argv[]) {
     {
     	void *boardObj = smmdb_getData(LISTNO_NODE, i);
     	
-        printf("node %i : %s, %i(%s)\n",
+        printf(" => %i. %s, %i(%s), credit:%i, energy:%i\n",
 		                  i, smmObj_getNodeName(boardObj), 
 		                  smmObj_getNodeType(boardObj), smmObj_getTypeName(smmObj_getNodeType(boardObj)),
 						  smmObj_getNodeCredit(boardObj), smmObj_getNodeEnergy(boardObj));
@@ -223,12 +225,25 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading food card component......\n");
-    while () //read a food parameter set
+    while (fscanf(fp, "%s %i", FdName, &charge) == 2) //read a food parameter set
     {
         //store the parameter set
+        void *foodObj = smmObj_foodObject(FdName, charge);
+        smmdb_addTail(LISTNO_NODE, foodObj);
+        food_nr++;
     }
     fclose(fp);
     printf("Total number of food cards : %i\n", food_nr);
+    
+    
+    for (i=0;i<food_nr;i++)
+    {
+    	void *foodObj = smmdb_getData(LISTNO_NODE, i);
+    	
+    	printf(" => %i. %s, charge:%i\n",
+		                i, smmObj_getNodeFdName(foodObj),
+						smmObj_getNodeCharge(foodObj));
+	}
     
     
     
@@ -240,12 +255,21 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading festival card component......\n");
-    while () //read a festival card string
+    while (fscanf(fp, "%s", name) == 1) //read a festival card string
     {
         //store the parameter set
+        void *festivalObj = smmObj_genObject(name, 0);
+        smmdb_addTail(LISTNO_NODE, festivalObj);
     }
     fclose(fp);
     printf("Total number of festival cards : %i\n", festival_nr);
+    
+    for (i=0;i<festival_nr;i++)
+    {
+    	void *festivalObj = smmdb_getData(LISTNO_NODE, i);
+    	
+    	printf(" => %i, %s", i, smmObj_getNode )
+	}
     #endif
     
     
