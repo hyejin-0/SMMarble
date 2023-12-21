@@ -172,9 +172,7 @@ int main(int argc, const char * argv[]) {
     int initEnergy;
     char name2[MAX_CHARNAME];
     int charge;
-    
     char mission[MAX_CHARNAME];
-    
     int turn = 0;
     
     board_nr = 0;
@@ -276,12 +274,12 @@ int main(int argc, const char * argv[]) {
     	printf(" => %i. %s\n", i, smmObj_getNodeMission(festivalObj));
 	}
 	
+	//print opening phrase
 	printf("\n\n\n=========================================================\n");
 	printf("---------------------------------------------------------\n");
 	printf(" Sookmyung Marble!! Let's Graduate (total credit : 30)!! \n");
 	printf("---------------------------------------------------------\n");
 	printf("=========================================================\n\n\n");
-   
     
     
     //2. Player configuration ---------------------------------------------------------------------------------

@@ -30,9 +30,6 @@ char* smmObj_getTypeName(int type)
 }
 
 
-
-
-
 //1. 구조체 형식 정의
 typedef struct smmObject {
 	    char name[MAX_CHARNAME];
@@ -43,9 +40,7 @@ typedef struct smmObject {
 	    smmObjGrade_e grade;
 	    char name2[MAX_CHARNAME];
 	    int charge;
-	    
 	    char mission[MAX_CHARNAME];
-	    
 } smmObject_t;
 
 static smmObject_t smm_node[MAX_NODE];
@@ -141,4 +136,3 @@ char* smmObj_getNodeMission(void* obj)
 	smmObject_t* ptr = (smmObject_t*)obj;
 	return ptr->mission;
 }
-
