@@ -15,6 +15,7 @@
 #define FOODFILEPATH "marbleFoodConfig.txt"
 #define FESTFILEPATH "marbleFestivalConfig.txt"
 
+#define GRADUATE_CREDIT 30
 
 
 //board configuration parameters
@@ -33,6 +34,7 @@ typedef struct player {
 	    int flag_graduate;
 } player_t;
 
+
 static player_t *cur_player;
 //static player_t cur_player[MAX_PLAYER];
 
@@ -44,7 +46,6 @@ static char player_name[MAX_PLAYER][MAX_CHARNAME];
 
 //function prototypes
 #if 0
-int isGraduated(void); //check if any player is graduated
 float calcAverageGrade(int player); //calculate average grade of the player
 smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
 void* findGrade(int player, char *lectureName); //find the grade from the player's grade history
@@ -160,6 +161,31 @@ void goForward(int player, int step) //make player go "step" steps on the board 
 	           cur_player[player].name, cur_player[player].position,
 			   smmObj_getNodeName(boardPtr));
 }
+
+
+//check if any player is graduated
+int isPlayerGraduated()
+{
+	int i;
+	for (i=0;i<player_nr;i++)
+	{
+		if (cur_player[i].accumCredit >= GRADUATE_CREDIT && cur_player[i].position == 0)
+		{
+			endGame(i); //game end when graduation conditions are met
+		}
+	}
+	return 0; //no graduates
+ } 
+ 
+void endGame(int player)
+{
+	printf("Congratulations, %s graduated!\n", cur_player[player].name);
+	printf("Courses taken:\n");
+	printGrades(player); //print grades
+	exit(0); //game end
+}
+
+
 
 int main(int argc, const char * argv[]) {
     
@@ -301,7 +327,7 @@ int main(int argc, const char * argv[]) {
     
     
     //3. SM Marble game starts ---------------------------------------------------------------------------------
-    while (1) //is anybody graduated?
+    while (1) 
     {
         int die_result;
         
@@ -320,8 +346,10 @@ int main(int argc, const char * argv[]) {
         
         //4-5. next turn
         turn = (turn + 1)%player_nr;
+        
+		//4-6. is anybody graduated?
+		isPlayerGraduated(); 
     }
-    
     
     free(cur_player);
     system("PAUSE");
